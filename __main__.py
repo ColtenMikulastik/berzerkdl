@@ -51,13 +51,21 @@ def main():
     req = requests.get(main_url)
     soup = BeautifulSoup(req.text, "html.parser")
     pages = soup.find_all("tr")
+    # because we are getting randome bs
+    pages.pop(0)
+    # look for all the important information
+    all_name_date_link = []
     for page in pages:
         name_date_link = []
         for td in page.find_all("td"):
-            name_date_link.append(td)
-            print(name_date_link[0])
+            name_date_link.append(td) 
+        name_date_link[0] = name_date_link[0].text
+        name_date_link[1] = name_date_link[1].text
+        all_name_date_link.append(name_date_link)
     
-            
+    print(all_name_date_link)
+    
+    
     # this is the url for the page I want to take
     url = "https://readberserk.com/chapter/berserk-chapter-a0/"
     
