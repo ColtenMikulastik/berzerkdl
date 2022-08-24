@@ -59,8 +59,9 @@ def main():
         name_date_link = []
         for td in page.find_all("td"):
             name_date_link.append(td) 
-        name_date_link[0] = name_date_link[0].text
+        name_date_link[0] = name_date_link[0].text.replace(" ", "_")
         name_date_link[1] = name_date_link[1].text
+        name_date_link[2] = name_date_link[2]
         all_name_date_link.append(name_date_link)
     
     print(all_name_date_link)
