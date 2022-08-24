@@ -41,6 +41,7 @@ def download_web_images(url, direc):
         # write it to a file
         with open(name + ".jpg", "wb") as f:
             f.write(im.content)
+    os.chdir("..")
 
 
 
@@ -69,7 +70,8 @@ def main():
         all_name_date_link.append(name_date_link)
     
     print(all_name_date_link)
-    
+    for name_date_link in all_name_date_link:
+        download_web_images(name_date_link[2], name_date_link[0])
     
     # this is the url for the page I want to take
     url = "https://readberserk.com/chapter/berserk-chapter-a0/"
