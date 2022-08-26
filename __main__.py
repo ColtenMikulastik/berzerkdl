@@ -18,6 +18,9 @@ def download_web_images(url, direc):
     
     # start index for img download
     start_img = 0
+    
+    # defining my indexr early
+    i = 1
 
     # make the directory
     try:
@@ -27,14 +30,22 @@ def download_web_images(url, direc):
         print("File already made, looking for remains...")
         # we need to find the last image
         done_img = os.listdir()
+        # store last big
+        img_num = []
+        for img in done_img:
+            # get num val from file name
+            img_num.append(int(done_img[6:9]))
+            
+        # change the start img to whatever the last existing img is...
+        start_img = max(img_num)
+        i = start_img
 
-        # change the start img to whatever the last img is
-        start_img = 
+        # so dont forget to delete the last img, cause it's very likely courrupted
+        os.remove(done_img[-1])
 
 
     # loop through all the images
     os.chdir(direc)
-    i = 1
 
     for image in images[start_img:]:
         name = "image_" + str(i).zfill(3)
