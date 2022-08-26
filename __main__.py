@@ -28,20 +28,27 @@ def download_web_images(url, direc):
     except FileExistsError:
         # we are going to look for some remnents
         print("File already made, looking for remains...")
+        
+        # change to the dir rq
+        os.chdir(direc)
         # we need to find the last image
         done_img = os.listdir()
-        # store last big
+
+        # make array to store numbers
         img_num = []
         for img in done_img:
             # get num val from file name
-            img_num.append(int(done_img[6:9]))
+            img_num.append(int(img[6:9]))
             
         # change the start img to whatever the last existing img is...
-        start_img = max(img_num)
+        start_img = (max(img_num) - 1)
         i = start_img
 
         # so dont forget to delete the last img, cause it's very likely courrupted
         os.remove(done_img[-1])
+
+        # go back
+        os.chdir("..")
 
 
     # loop through all the images
