@@ -16,13 +16,27 @@ def download_web_images(url, direc):
     # find all images
     images = soup.find_all('img')
     
+    # start index for img download
+    start_img = 0
+
     # make the directory
-    os.mkdir(direc)
+    try:
+        os.mkdir(direc)
+    except FileExistsError:
+        # we are going to look for some remnents
+        print("File already made, looking for remains...")
+        # we need to find the last image
+        done_img = os.listdir()
+
+        # change the start img to whatever the last img is
+        start_img = 
+
 
     # loop through all the images
     os.chdir(direc)
     i = 1
-    for image in images:
+
+    for image in images[start_img:]:
         name = "image_" + str(i).zfill(3)
         i += 1
         # get the image section
