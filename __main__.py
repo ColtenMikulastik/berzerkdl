@@ -41,11 +41,11 @@ def download_web_images(url, direc):
             img_num.append(int(img[6:9]))
             
         # change the start img to whatever the last existing img is...
-        start_img = (max(img_num) - 1)
-        i = start_img
+        i = max(img_num)
+        start_img = i - 1
 
         # so dont forget to delete the last img, cause it's very likely courrupted
-        os.remove(done_img[-1])
+        os.remove("image_" + str(i).zfill(3) + ".jpg")
 
         # go back
         os.chdir("..")
