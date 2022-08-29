@@ -11,8 +11,7 @@ import threading
 # 2: then implemnet queueing
 # 3: then implement threading
 
-def download_web_images(url, direc):
- 
+def get_img_list(url): 
     # grab the html
     r = requests.get(url)
 
@@ -21,7 +20,13 @@ def download_web_images(url, direc):
     
     # find all images
     images = soup.find_all('img')
+
+
+def download_web_images(url, direc):
     
+    # call teh html parser to get img on web page
+    images = get_img_list(url)
+
     # start index for img download
     start_img = 0
     
@@ -62,12 +67,12 @@ def download_web_images(url, direc):
     
     # loop and download 
     for image in images[start_img:]:
-        name = "image_" + str(i).zfill(3)
-        i += 1
         # get the image section
         link = image["src"]
         print(name)
         print(link)
+        
+        # attempt to download http content
         try:
             # ask nicely for the jpg
             im = requests.get(link)
@@ -76,7 +81,10 @@ def download_web_images(url, direc):
             print("failed on " + name)
             time.sleep(3)
             im = requests.get(link)
-
+        
+        # create the syntax for the file
+        name = "image_" + str(i).zfill(3)
+        i += 1
         # write it to a file
         with open(name + ".jpg", "wb") as f:
             f.write(im.content)
