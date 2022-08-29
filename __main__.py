@@ -3,10 +3,15 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import time
+import threading
 
 
-def download_web_images(url, direc):
- 
+# I need to:
+# 1: encapsulate the download_web_imgs func into smaller functions
+# 2: then implemnet queueing
+# 3: then implement threading
+
+def get_img_list(url): 
     # grab the html
     r = requests.get(url)
 
@@ -15,7 +20,14 @@ def download_web_images(url, direc):
     
     # find all images
     images = soup.find_all('img')
+    return images
+
+
+def download_web_images(url, direc):
     
+    # call teh html parser to get img on web page
+    images = get_img_list(url)
+
     # start index for img download
     start_img = 0
     
@@ -53,23 +65,30 @@ def download_web_images(url, direc):
 
     # loop through all the images
     os.chdir(direc)
-
+    real_img_lst = []
+    # loop and download 
     for image in images[start_img:]:
-        name = "image_" + str(i).zfill(3)
-        i += 1
         # get the image section
         link = image["src"]
-        print(name)
-        print(link)
+        
+        # attempt to download http content
         try:
             # ask nicely for the jpg
             im = requests.get(link)
+            real_img_lst.append(im)
             # if rude try again
         except OSError:
             print("failed on " + name)
             time.sleep(3)
             im = requests.get(link)
-
+            real_img_lst.append(im)
+    
+    # loop the images and save them in files
+    for real_img in real_img_lst:
+        # create the syntax for the file
+        name = "image_" + str(i).zfill(3)
+        i += 1
+        print("writing " + link + " to file: " + name)
         # write it to a file
         with open(name + ".jpg", "wb") as f:
             f.write(im.content)
