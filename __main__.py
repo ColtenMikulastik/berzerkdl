@@ -13,29 +13,13 @@ import threading
 # 
 # bug list: if you run in restart mode, it will delete every last file and redownload it
 
-def get_img_list(url): 
-    # grab the html
-    r = requests.get(url)
-
-    #parse the html
-    soup = BeautifulSoup(r.text, "html.parser")
-    
-    # find all images
-    images = soup.find_all('img')
-    return images
-
-
-def download_web_images(url, direc):
-    
-    # call teh html parser to get img on web page
-    images = get_img_list(url)
-
+def make_or_check_dir(direc):
     # start index for img download
     start_img = 0
     
     # defining my indexr early
     i = 1
-
+    
     # make the directory
     try:
         os.mkdir(direc)
@@ -63,7 +47,29 @@ def download_web_images(url, direc):
 
         # go back
         os.chdir("..")
+    return start_img, i
 
+
+
+
+def get_img_list(url): 
+    # grab the html
+    r = requests.get(url)
+
+    #parse the html
+    soup = BeautifulSoup(r.text, "html.parser")
+    
+    # find all images
+    images = soup.find_all('img')
+    return images
+
+
+def download_web_images(url, direc):
+    
+    # call teh html parser to get img on web page
+    images = get_img_list(url)
+
+    start_img, i = make_or_check_dir(direc)
 
     # loop through all the images
     os.chdir(direc)
