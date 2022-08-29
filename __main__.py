@@ -20,6 +20,7 @@ def get_img_list(url):
     
     # find all images
     images = soup.find_all('img')
+    return images
 
 
 def download_web_images(url, direc):
@@ -64,27 +65,30 @@ def download_web_images(url, direc):
 
     # loop through all the images
     os.chdir(direc)
-    
+    real_img_lst = []
     # loop and download 
     for image in images[start_img:]:
         # get the image section
         link = image["src"]
-        print(name)
-        print(link)
         
         # attempt to download http content
         try:
             # ask nicely for the jpg
             im = requests.get(link)
+            real_img_lst.append(im)
             # if rude try again
         except OSError:
             print("failed on " + name)
             time.sleep(3)
             im = requests.get(link)
-        
+            real_img_lst.append(im)
+    
+    # loop the images and save them in files
+    for real_img in real_img_lst:
         # create the syntax for the file
         name = "image_" + str(i).zfill(3)
         i += 1
+        print("writing " + link + " to file: " + name)
         # write it to a file
         with open(name + ".jpg", "wb") as f:
             f.write(im.content)
