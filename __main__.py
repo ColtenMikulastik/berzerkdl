@@ -10,6 +10,8 @@ import threading
 # 1: encapsulate the download_web_imgs func into smaller functions
 # 2: then implemnet queueing
 # 3: then implement threading
+# 
+# bug list: if you run in restart mode, it will delete every last file and redownload it
 
 def get_img_list(url): 
     # grab the html
@@ -91,7 +93,7 @@ def download_web_images(url, direc):
         print("writing " + link + " to file: " + name)
         # write it to a file
         with open(name + ".jpg", "wb") as f:
-            f.write(im.content)
+            f.write(real_img.content)
     os.chdir("..")
 
 
