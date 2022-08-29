@@ -3,7 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import time
+import threading
 
+
+# I need to:
+# 1: encapsulate the download_web_imgs func into smaller functions
+# 2: then implemnet queueing
+# 3: then implement threading
 
 def download_web_images(url, direc):
  
@@ -53,7 +59,8 @@ def download_web_images(url, direc):
 
     # loop through all the images
     os.chdir(direc)
-
+    
+    # loop and download 
     for image in images[start_img:]:
         name = "image_" + str(i).zfill(3)
         i += 1
