@@ -13,6 +13,27 @@ import threading
 # 
 # bug list: if you run in restart mode, it will delete every last file and redownload it
 
+def download_from_list(real_img_lst, images, start_img):
+    # loop through list
+    for image in images[start_img:]:
+        # get the image section
+        link = image["src"]
+        
+        # attempt to download http content
+        try:
+            # ask nicely for the jpg
+            im = requests.get(link)
+            real_img_lst.append(im)
+            # if rude try again
+        except OSError:
+            print("failed on " + name)
+            time.sleep(3)
+            im = requests.get(link)
+            real_img_lst.append(im) 
+    return real_img_lst
+    
+
+
 def make_or_check_dir(direc):
     # start index for img download
     start_img = 0
@@ -74,29 +95,15 @@ def download_web_images(url, direc):
     # loop through all the images
     os.chdir(direc)
     real_img_lst = []
-    # loop and download 
-    for image in images[start_img:]:
-        # get the image section
-        link = image["src"]
-        
-        # attempt to download http content
-        try:
-            # ask nicely for the jpg
-            im = requests.get(link)
-            real_img_lst.append(im)
-            # if rude try again
-        except OSError:
-            print("failed on " + name)
-            time.sleep(3)
-            im = requests.get(link)
-            real_img_lst.append(im)
-    
+
+    real_img_lst = download_from_list(real_img_lst, images, start_img)
+ 
     # loop the images and save them in files
     for real_img in real_img_lst:
         # create the syntax for the file
         name = "image_" + str(i).zfill(3)
         i += 1
-        print("writing " + link + " to file: " + name)
+        print("writing file " + str(i))
         # write it to a file
         with open(name + ".jpg", "wb") as f:
             f.write(real_img.content)
