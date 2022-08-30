@@ -7,9 +7,8 @@ import threading
 
 
 # I need to:
-# 1: encapsulate the download_web_imgs func into smaller functions
-# 2: then implemnet queueing
-# 3: then implement threading
+# 2 [ ] : then implemnet queueing
+# 3 [ ] : then implement threading
 # 
 # bug list: if you run in restart mode, it will delete every last file and redownload it
 
