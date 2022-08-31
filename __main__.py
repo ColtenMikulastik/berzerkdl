@@ -12,6 +12,11 @@ import threading
 # 
 # bug list: if you run in restart mode, it will delete every last file and redownload it
 
+
+def fill_q(q, list_of_items):
+    for i in list_of_items:
+        q.put(i)
+
 def download_from_list(real_img_lst, images, start_img):
     # loop through list
     for image in images[start_img:]:
