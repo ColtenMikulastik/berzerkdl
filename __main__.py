@@ -34,8 +34,7 @@ def download_from_list(real_img_lst, images, start_img):
             time.sleep(3)
             im = requests.get(link)
             real_img_lst.append(im) 
-    return real_img_lst
-    
+    # you don't need to return the list, because it is shallow
 
 
 def make_or_check_dir(direc):
@@ -100,7 +99,7 @@ def download_web_images(url, direc):
     os.chdir(direc)
     real_img_lst = []
 
-    real_img_lst = download_from_list(real_img_lst, images, start_img)
+    download_from_list(real_img_lst, images, start_img)
  
     # loop the images and save them in files
     for real_img in real_img_lst:
