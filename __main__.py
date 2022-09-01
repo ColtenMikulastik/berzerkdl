@@ -8,7 +8,6 @@ import threading
 
 
 # I need to:
-# 2 [ ] : then implemnet queueing
 # 3 [ ] : then implement threading
 # 
 # bug list: if you run in restart mode, it will delete every last file and redownload it
@@ -62,7 +61,7 @@ def make_or_check_dir(direc):
     start_img = 0
     
     # defining my indexr early
-    i = 1
+    i = 0
     
     # make the directory
     try:
@@ -124,7 +123,20 @@ def download_web_images(url, direc):
     fill_q(q, images, start_img)
 
     # download_from_list(real_img_lst, images, start_img)
-    q_download_from_list(real_img_lst, q)
+
+    # may the threading begin
+    threads = []
+    for j in range(10):
+        t = threading.Thread(target=q_download_from_list, args=[real_img_lst, q])
+        threads.append(t)
+
+    for thread in threads:
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
+    # q_download_from_list(real_img_lst, q)
  
     # loop the images and save them in files
     for real_img in real_img_lst:
