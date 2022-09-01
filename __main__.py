@@ -19,6 +19,24 @@ def fill_q(q, list_of_items, start_img=0):
         q.put(i)
 
 
+def q_download_from_list(real_img_lst, q):
+    while not(q.empty()):
+        # this might be finicy
+        link = q.get()["src"]
+
+        # attempt to download http content
+        try:
+            #ask for jpg from the source link
+            im = requests.get(link)
+            real_img_lst.append(im)
+        except OSError:
+            # might need to print something to console if fail
+            # wait a bit
+            time.sleep(3)
+            im_requests.get(link)
+            real_img_lst.append(im)
+            
+
 def download_from_list(real_img_lst, images, start_img):
     # loop through list
     for image in images[start_img:]:
@@ -105,7 +123,8 @@ def download_web_images(url, direc):
     q = queue.Queue()
     fill_q(q, images, start_img)
 
-    download_from_list(real_img_lst, images, start_img)
+    # download_from_list(real_img_lst, images, start_img)
+    q_download_from_list(real_img_lst, q)
  
     # loop the images and save them in files
     for real_img in real_img_lst:
