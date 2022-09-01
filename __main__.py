@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import time
+import queue
 import threading
 
 
@@ -13,9 +14,10 @@ import threading
 # bug list: if you run in restart mode, it will delete every last file and redownload it
 
 
-def fill_q(q, list_of_items):
-    for i in list_of_items:
+def fill_q(q, list_of_items, start_img=0):
+    for i in list_of_items[start_img:]:
         q.put(i)
+
 
 def download_from_list(real_img_lst, images, start_img):
     # loop through list
@@ -98,6 +100,10 @@ def download_web_images(url, direc):
     # loop through all the images
     os.chdir(direc)
     real_img_lst = []
+    
+    # I want to make the real_img_lst into a q
+    q = queue.Queue()
+    fill_q(q, images, start_img)
 
     download_from_list(real_img_lst, images, start_img)
  
