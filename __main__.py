@@ -8,9 +8,10 @@ import threading
 
 
 # I need to:
-# 3 [ ] : then implement threading
 # 
 # bug list: if you run in restart mode, it will delete every last file and redownload it
+# -not ordered because the q is unordered... I don't think there is a way to fix this tho...
+
 
 
 def fill_q(q, list_of_items, start_img=0):
