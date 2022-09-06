@@ -13,6 +13,20 @@ import threading
 # -not ordered because the q is unordered... I don't think there is a way to fix this tho...
 
 
+def run_threaded():
+    """returns true if you want to thread"""
+    while True:
+        print("Would you like to thread?(y/n)")
+        print("If you choose to run with threading,")
+        print("the images will be unordered but downloaded faster")
+        threaded = input("...:")
+        if threaded == 'y':
+            return True
+        elif threaded == 'n':
+            return False
+        else:
+            print("LOWER CASE!")
+
 
 def fill_q(q, list_of_items, start_img=0):
     for i in list_of_items[start_img:]:
@@ -108,36 +122,42 @@ def get_img_list(url):
     return images
 
 
-def download_web_images(url, direc):
+def download_web_images(url, direc, thread_bool):
     
+
+
+    real_img_lst = []
     # call teh html parser to get img on web page
     images = get_img_list(url)
-
+    
     start_img, i = make_or_check_dir(direc)
-
+    
     # loop through all the images
     os.chdir(direc)
-    real_img_lst = []
     
-    # I want to make the real_img_lst into a q
-    q = queue.Queue()
-    fill_q(q, images, start_img)
-
-    # download_from_list(real_img_lst, images, start_img)
-
-    # may the threading begin
-    threads = []
-    for j in range(10):
-        t = threading.Thread(target=q_download_from_list, args=[real_img_lst, q])
-        threads.append(t)
-
-    for thread in threads:
-        thread.start()
-
-    for thread in threads:
-        thread.join()
-
-    # q_download_from_list(real_img_lst, q)
+    # if the user chooses to use threading
+    if thread_bool:
+        # I want to make the real_img_lst into a q
+        q = queue.Queue()
+        fill_q(q, images, start_img)
+    
+        # download_from_list(real_img_lst, images, start_img)
+    
+        # may the threading begin
+        threads = []
+        for j in range(10):
+            t = threading.Thread(target=q_download_from_list, args=[real_img_lst, q])
+            threads.append(t)
+    
+        for thread in threads:
+            thread.start()
+    
+        for thread in threads:
+            thread.join()
+        # q_download_from_list(real_img_lst, q)
+    else:
+        # if the user chooses to not use threading
+        download_from_list(real_img_lst, images, start_img)
  
     # loop the images and save them in files
     for real_img in real_img_lst:
@@ -154,7 +174,8 @@ def download_web_images(url, direc):
 
 def main():
     main_url = "https://readberserk.com/"
-
+    # get the info on if we are going to run in a threaded mode
+    thread_bool = run_threaded()
     # so first we are going to go to the first web-page that stores all the web pages
     req = requests.get(main_url)
     soup = BeautifulSoup(req.text, "html.parser")
@@ -178,9 +199,9 @@ def main():
     
     print(all_name_date_link)
     for name_date_link in all_name_date_link:
-        download_web_images(name_date_link[2], name_date_link[0])
+        download_web_images(name_date_link[2], name_date_link[0], thread_bool)
     
-    # this is the url for the page I want to take
+    # this is the url for the page I want to take FIX THIS
     url = "https://readberserk.com/chapter/berserk-chapter-a0/"
     
     directory = "Episode_One"
