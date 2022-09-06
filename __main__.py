@@ -13,6 +13,20 @@ import threading
 # -not ordered because the q is unordered... I don't think there is a way to fix this tho...
 
 
+def run_threaded():
+    """returns true if you want to thread"""
+    while True:
+        print("Would you like to thread?(y/n)")
+        print("If you choose to run with threading,")
+        print("the images will be unordered but downloaded faster")
+        threaded = input("...:")
+        if threaded == 'y':
+            return True
+        elif threaded == 'n':
+            return False
+        else:
+            print("LOWER CASE!")
+
 
 def fill_q(q, list_of_items, start_img=0):
     for i in list_of_items[start_img:]:
@@ -154,7 +168,8 @@ def download_web_images(url, direc):
 
 def main():
     main_url = "https://readberserk.com/"
-
+    # get the info on if we are going to run in a threaded mode
+    thread_bool = run_threaded()
     # so first we are going to go to the first web-page that stores all the web pages
     req = requests.get(main_url)
     soup = BeautifulSoup(req.text, "html.parser")
