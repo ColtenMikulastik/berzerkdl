@@ -124,34 +124,40 @@ def get_img_list(url):
 
 def download_web_images(url, direc, thread_bool):
     
+
+
+    real_img_lst = []
     # call teh html parser to get img on web page
     images = get_img_list(url)
-
+    
     start_img, i = make_or_check_dir(direc)
-
+    
     # loop through all the images
     os.chdir(direc)
-    real_img_lst = []
     
-    # I want to make the real_img_lst into a q
-    q = queue.Queue()
-    fill_q(q, images, start_img)
-
-    # download_from_list(real_img_lst, images, start_img)
-
-    # may the threading begin
-    threads = []
-    for j in range(10):
-        t = threading.Thread(target=q_download_from_list, args=[real_img_lst, q])
-        threads.append(t)
-
-    for thread in threads:
-        thread.start()
-
-    for thread in threads:
-        thread.join()
-
-    # q_download_from_list(real_img_lst, q)
+    # if the user chooses to use threading
+    if thread_bool:
+        # I want to make the real_img_lst into a q
+        q = queue.Queue()
+        fill_q(q, images, start_img)
+    
+        # download_from_list(real_img_lst, images, start_img)
+    
+        # may the threading begin
+        threads = []
+        for j in range(10):
+            t = threading.Thread(target=q_download_from_list, args=[real_img_lst, q])
+            threads.append(t)
+    
+        for thread in threads:
+            thread.start()
+    
+        for thread in threads:
+            thread.join()
+        # q_download_from_list(real_img_lst, q)
+    else:
+        # if the user chooses to not use threading
+        download_from_list(real_img_lst, images, start_img)
  
     # loop the images and save them in files
     for real_img in real_img_lst:
@@ -195,7 +201,7 @@ def main():
     for name_date_link in all_name_date_link:
         download_web_images(name_date_link[2], name_date_link[0], thread_bool)
     
-    # this is the url for the page I want to take
+    # this is the url for the page I want to take FIX THIS
     url = "https://readberserk.com/chapter/berserk-chapter-a0/"
     
     directory = "Episode_One"
