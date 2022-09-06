@@ -122,7 +122,7 @@ def get_img_list(url):
     return images
 
 
-def download_web_images(url, direc):
+def download_web_images(url, direc, thread_bool):
     
     # call teh html parser to get img on web page
     images = get_img_list(url)
@@ -193,7 +193,7 @@ def main():
     
     print(all_name_date_link)
     for name_date_link in all_name_date_link:
-        download_web_images(name_date_link[2], name_date_link[0])
+        download_web_images(name_date_link[2], name_date_link[0], thread_bool)
     
     # this is the url for the page I want to take
     url = "https://readberserk.com/chapter/berserk-chapter-a0/"
